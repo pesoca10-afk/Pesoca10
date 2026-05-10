@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha de Evaluación — PESOCA10</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #f0f4f8; color: #222; }
+
+  .header { background: #1B3A5C; padding: 24px 20px; text-align: center; }
+  .header h1 { color: white; font-size: 28px; letter-spacing: 2px; }
+  .header p { color: #AADDCC; font-size: 14px; margin-top: 4px; }
+
+  .progress-bar { background: #ddd; height: 6px; }
+  .progress-fill { background: #007A5E; height: 6px; transition: width 0.4s; }
+
+  .step { display: none; padding: 20px; max-width: 600px; margin: 0 auto; }
+  .step.active { display: block; }
+
+  .step-title { background: #007A5E; color: white; padding: 12px 16px; border-radius: 8px; font-size: 16px; font-weight: bold; margin-bottom: 20px; }
+  .step-num { background: #1B3A5C; color: white; border-radius: 50%; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; margin-right: 8px; }
+
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 13px; font-weight: bold; color: #1B3A5C; margin-bottom: 6px; }
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px;
+    font-size: 15px; background: white; color: #222;
+    transition: border-color 0.2s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    outline: none; border-color: #007A5E;
+  }
+  .field textarea { height: 80px; resize: vertical; }
+  .field .hint { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .section-label { font-size: 12px; font-weight: bold; color: #007A5E; text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 10px; border-bottom: 2px solid #E8F5F0; padding-bottom: 6px; }
+
+  .btn-row { display: flex; gap: 12px; margin-top: 24px; padding-bottom: 40px; }
+  .btn-next { flex: 1; background: #007A5E; color: white; border: none; padding: 16px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; }
+  .btn-next:active { background: #005940; }
+  .btn-back { background: #ddd; color: #555; border: none; padding: 16px 20px; border-radius: 10px; font-size: 16px; cursor: pointer; }
+
+  .btn-send { flex: 1; background: #25D366; color: white; border: none; padding: 16px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+  .confirm-box { background: #E8F5F0; border: 2px solid #007A5E; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .confirm-box h3 { color: #1B3A5C; font-size: 15px; margin-bottom: 8px; }
+  .confirm-box p { font-size: 13px; color: #444; line-height: 1.6; }
+
+  .required { color: #CC0000; }
+  
+  .radio-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .radio-option { border: 2px solid #ddd; border-radius: 8px; padding: 10px 12px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 8px; background: white; transition: all 0.2s; }
+  .radio-option input[type=radio] { accent-color: #007A5E; width: 16px; height: 16px; }
+  .radio-option:has(input:checked) { border-color: #007A5E; background: #E8F5F0; color: #007A5E; font-weight: bold; }
+
+  .check-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .check-option { border: 2px solid #ddd; border-radius: 8px; padding: 10px 12px; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 8px; background: white; transition: all 0.2s; }
+  .check-option input[type=checkbox] { accent-color: #007A5E; width: 16px; height: 16px; }
+  .check-option:has(input:checked) { border-color: #007A5E; background: #E8F5F0; }
+
+  .footer { text-align: center; padding: 12px; color: #888; font-size: 11px; background: #1B3A5C; color: #AADDCC; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>💪 PESOCA10</h1>
+  <p>Coach Enrique Monserrat — Ficha de Evaluación</p>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-fill" id="progress" style="width:20%"></div>
+</div>
+
+<!-- PASO 1: DATOS PERSONALES -->
+<div class="step active" id="step1">
+  <br>
+  <div class="step-title"><span class="step-num">1</span> Datos Personales</div>
+
+  <div class="field">
+    <label>Nombre completo <span class="required">*</span></label>
+    <input type="text" id="nombre" placeholder="Tu nombre y apellido">
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>Fecha de nacimiento <span class="required">*</span></label>
+      <input type="date" id="fecha_nac">
+    </div>
+    <div class="field">
+      <label>Sexo <span class="required">*</span></label>
+      <select id="sexo">
+        <option value="">Seleccioná</option>
+        <option>Masculino</option>
+        <option>Femenino</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Ciudad / País</label>
+    <input type="text" id="ciudad" placeholder="Ej: Asunción, Paraguay">
+  </div>
+
+  <div class="field">
+    <label>WhatsApp / Teléfono <span class="required">*</span></label>
+    <input type="tel" id="telefono" placeholder="+595 9XX XXX XXX">
+  </div>
+
+  <div class="field">
+    <label>Email</label>
+    <input type="email" id="email" placeholder="tu@email.com">
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-next" onclick="nextStep(1)">Siguiente →</button>
+  </div>
+</div>
+
+<!-- PASO 2: MEDIDAS CORPORALES -->
+<div class="step" id="step2">
+  <br>
+  <div class="step-title"><span class="step-num">2</span> Medidas Corporales</div>
+
+  <div class="section-label">Medidas básicas</div>
+  <div class="field-row">
+    <div class="field">
+      <label>Estatura (cm) <span class="required">*</span></label>
+      <input type="number" id="estatura" placeholder="Ej: 170">
+    </div>
+    <div class="field">
+      <label>Peso actual (kg) <span class="required">*</span></label>
+      <input type="number" id="peso" placeholder="Ej: 83" step="0.1">
+    </div>
+  </div>
+
+  <div class="section-label">Circunferencias corporales</div>
+  <div class="field-row">
+    <div class="field">
+      <label>Cintura (cm)</label>
+      <input type="number" id="cintura" placeholder="A la altura del ombligo">
+      <div class="hint">Medí a la altura del ombligo</div>
+    </div>
+    <div class="field">
+      <label>Cadera (cm)</label>
+      <input type="number" id="cadera" placeholder="A la altura de los glúteos">
+      <div class="hint">Medí a la altura de los glúteos</div>
+    </div>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>Cuello (cm)</label>
+      <input type="number" id="cuello" placeholder="Ej: 37">
+    </div>
+    <div class="field">
+      <label>Pecho (cm)</label>
+      <input type="number" id="pecho" placeholder="A la altura de los pectorales">
+    </div>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>Bíceps derecho (cm)</label>
+      <input type="number" id="biceps" placeholder="Contraído">
+    </div>
+    <div class="field">
+      <label>Muslo derecho (cm)</label>
+      <input type="number" id="muslo" placeholder="En la parte más ancha">
+    </div>
+  </div>
+
+  <div class="section-label">Objetivo</div>
+  <div class="field">
+    <label>¿Cuál es tu objetivo principal? <span class="required">*</span></label>
+    <div class="radio-group">
+      <label class="radio-option"><input type="radio" name="objetivo" value="Bajar grasa"> Bajar grasa</label>
+      <label class="radio-option"><input type="radio" name="objetivo" value="Ganar músculo"> Ganar músculo</label>
+      <label class="radio-option"><input type="radio" name="objetivo" value="Recomposición corporal"> Recomposición</label>
+      <label class="radio-option"><input type="radio" name="objetivo" value="Competencia"> Competencia</label>
+      <label class="radio-option"><input type="radio" name="objetivo" value="Salud general"> Salud general</label>
+      <label class="radio-option"><input type="radio" name="objetivo" value="Rendimiento deportivo"> Rendimiento</label>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-back" onclick="prevStep(2)">← Atrás</button>
+    <button class="btn-next" onclick="nextStep(2)">Siguiente →</button>
+  </div>
+</div>
+
+<!-- PASO 3: HÁBITOS Y RUTINA -->
+<div class="step" id="step3">
+  <br>
+  <div class="step-title"><span class="step-num">3</span> Hábitos y Rutina Diaria</div>
+
+  <div class="section-label">Sueño</div>
+  <div class="field-row">
+    <div class="field">
+      <label>¿A qué hora te levantás (Lun–Vie)?</label>
+      <input type="time" id="levanta_semana">
+    </div>
+    <div class="field">
+      <label>¿A qué hora te levantás (Sáb–Dom)?</label>
+      <input type="time" id="levanta_finde">
+    </div>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>¿A qué hora te acostás (Lun–Vie)?</label>
+      <input type="time" id="acuesta_semana">
+    </div>
+    <div class="field">
+      <label>¿A qué hora te acostás (Sáb–Dom)?</label>
+      <input type="time" id="acuesta_finde">
+    </div>
+  </div>
+
+  <div class="field">
+    <label>¿Hacés siesta?</label>
+    <div class="radio-group">
+      <label class="radio-option"><input type="radio" name="siesta" value="No"> No</label>
+      <label class="radio-option"><input type="radio" name="siesta" value="A veces"> A veces</label>
+      <label class="radio-option"><input type="radio" name="siesta" value="Sí, todos los días"> Sí, todos los días</label>
+      <label class="radio-option"><input type="radio" name="siesta" value="Sí, fines de semana"> Solo fines de semana</label>
+    </div>
+  </div>
+
+  <div class="section-label">Alimentación actual</div>
+  <div class="field">
+    <label>¿Cuántas comidas hacés por día normalmente?</label>
+    <div class="radio-group">
+      <label class="radio-option"><input type="radio" name="comidas_dia" value="1-2 comidas"> 1–2 comidas</label>
+      <label class="radio-option"><input type="radio" name="comidas_dia" value="3 comidas"> 3 comidas</label>
+      <label class="radio-option"><input type="radio" name="comidas_dia" value="4-5 comidas"> 4–5 comidas</label>
+      <label class="radio-option"><input type="radio" name="comidas_dia" value="Más de 5"> Más de 5</label>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>¿Cuánta agua tomás por día?</label>
+    <div class="radio-group">
+      <label class="radio-option"><input type="radio" name="agua" value="Menos de 1 litro"> Menos de 1L</label>
+      <label class="radio-option"><input type="radio" name="agua" value="1-2 litros"> 1–2 litros</label>
+      <label class="radio-option"><input type="radio" name="agua" value="2-3 litros"> 2–3 litros</label>
+      <label class="radio-option"><input type="radio" name="agua" value="Más de 3 litros"> Más de 3L</label>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>¿Tomás alcohol?</label>
+    <div class="radio-group">
+      <label class="radio-option"><input type="radio" name="alcohol" value="No tomo"> No tomo</label>
+      <label class="radio-option"><input type="radio" name="alcohol" value="Ocasionalmente"> Ocasionalmente</label>
+      <label class="radio-option"><input type="radio" name="alcohol" value="Fines de semana"> Fines de semana</label>
+      <label class="radio-option"><input type="radio" name="alcohol" value="Frecuentemente"> Frecuentemente</label>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Alimentos que no tolerás o no comés</label>
+    <input type="text" id="intolerancias" placeholder="Ej: mariscos, lácteos, gluten...">
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-back" onclick="prevStep(3)">← Atrás</button>
+    <button class="btn-next" onclick="nextStep(3)">Siguiente →</button>
+  </div>
+</div>
+
+<!-- PASO 4: ACTIVIDAD FÍSICA Y SALUD -->
+<div class="step" id="step4">
+  <br>
+  <div class="step-title"><span class="step-num">4</span> Actividad Física y Salud</div>
+
+  <div class="section-label">Entrenamiento actual</div>
+  <div class="field">
+    <label>¿Entrenás actualmente?</label>
+    <div class="radio-group">
+      <label class="radio-option"><input type="radio" name="entrena" value="No entreno"> No entreno</label>
+      <label class="radio-option"><input type="radio" name="entrena" value="Recién empiezo"> Recién empiezo</label>
+      <label class="radio-option"><input type="radio" name="entrena" value="Intermedio"> Intermedio</label>
+      <label class="radio-option"><input type="radio" name="entrena" value="Avanzado"> Avanzado</label>
+    </div>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>¿Cuántos días por semana?</label>
+      <select id="dias_entreno">
+        <option value="">Seleccioná</option>
+        <option>No entreno</option>
+        <option>1–2 días</option>
+        <option>3 días</option>
+        <option>4 días</option>
+        <option>5 días</option>
+        <option>6–7 días</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>¿A qué hora entrenás?</label>
+      <input type="time" id="hora_entreno">
+    </div>
+  </div>
+
+  <div class="field">
+    <label>¿Hacés cardio?</label>
+    <div class="radio-group">
+      <label class="radio-option"><input type="radio" name="cardio" value="No hago cardio"> No hago</label>
+      <label class="radio-option"><input type="radio" name="cardio" value="Raramente"> Raramente</label>
+      <label class="radio-option"><input type="radio" name="cardio" value="2-3 veces por semana"> 2–3 veces/semana</label>
+      <label class="radio-option"><input type="radio" name="cardio" value="Todos los días"> Todos los días</label>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>¿Qué tipo de trabajo tenés?</label>
+    <div class="radio-group">
+      <label class="radio-option"><input type="radio" name="trabajo" value="Sedentario (oficina/escritorio)"> Sedentario</label>
+      <label class="radio-option"><input type="radio" name="trabajo" value="Moderado (de pie parte del día)"> Moderado</label>
+      <label class="radio-option"><input type="radio" name="trabajo" value="Activo (caminás/movés mucho)"> Activo</label>
+      <label class="radio-option"><input type="radio" name="trabajo" value="Muy activo (trabajo físico)"> Muy activo</label>
+    </div>
+  </div>
+
+  <div class="section-label">Salud</div>
+  <div class="field">
+    <label>¿Tenés alguna patología o condición médica?</label>
+    <div class="check-group">
+      <label class="check-option"><input type="checkbox" name="patologia" value="Diabetes o prediabetes"> Diabetes</label>
+      <label class="check-option"><input type="checkbox" name="patologia" value="Hipertensión"> Hipertensión</label>
+      <label class="check-option"><input type="checkbox" name="patologia" value="Hipotiroidismo"> Hipotiroidismo</label>
+      <label class="check-option"><input type="checkbox" name="patologia" value="Colesterol alto"> Colesterol alto</label>
+      <label class="check-option"><input type="checkbox" name="patologia" value="Problemas articulares"> Articulaciones</label>
+      <label class="check-option"><input type="checkbox" name="patologia" value="Ninguna"> Ninguna</label>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>¿Tomás algún medicamento o suplemento actualmente?</label>
+    <input type="text" id="medicamentos" placeholder="Ej: TRT, Metformina, Whey, Creatina...">
+  </div>
+
+  <div class="field">
+    <label>¿Tenés alguna lesión que limite el entrenamiento?</label>
+    <input type="text" id="lesiones" placeholder="Ej: rodilla derecha, hombro izquierdo...">
+  </div>
+
+  <div class="field">
+    <label>Nivel de estrés diario</label>
+    <div class="radio-group">
+      <label class="radio-option"><input type="radio" name="estres" value="Bajo"> Bajo</label>
+      <label class="radio-option"><input type="radio" name="estres" value="Moderado"> Moderado</label>
+      <label class="radio-option"><input type="radio" name="estres" value="Alto"> Alto</label>
+      <label class="radio-option"><input type="radio" name="estres" value="Muy alto"> Muy alto</label>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-back" onclick="prevStep(4)">← Atrás</button>
+    <button class="btn-next" onclick="nextStep(4)">Siguiente →</button>
+  </div>
+</div>
+
+<!-- PASO 5: CONFIRMACIÓN Y ENVÍO -->
+<div class="step" id="step5">
+  <br>
+  <div class="step-title"><span class="step-num">5</span> Confirmación y Envío</div>
+
+  <div class="confirm-box">
+    <h3>✅ ¡Ya casi terminás!</h3>
+    <p>Revisá que todos tus datos estén correctos y apretá el botón verde para enviármelos por WhatsApp. Te voy a contactar a la brevedad para comenzar con tu plan personalizado.</p>
+  </div>
+
+  <div id="resumen" style="background:white;border-radius:10px;padding:16px;margin-bottom:16px;font-size:13px;line-height:1.8;border:2px solid #E8F5F0;"></div>
+
+  <div class="field">
+    <label>¿Algo más que quieras contarme? (opcional)</label>
+    <textarea id="comentarios" placeholder="Contame todo lo que considerés importante para tu plan..."></textarea>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-back" onclick="prevStep(5)">← Atrás</button>
+    <button class="btn-send" onclick="enviarWhatsApp()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Enviar a Coach Tony
+    </button>
+  </div>
+</div>
+
+<div class="footer">PESOCA10 · Coach Enrique Monserrat · Sin dolor no hay progreso</div>
+
+<script>
+let currentStep = 1;
+const totalSteps = 5;
+
+function nextStep(from) {
+  if (from === 1) {
+    if (!document.getElementById('nombre').value.trim()) { alert('Por favor ingresá tu nombre completo'); return; }
+    if (!document.getElementById('fecha_nac').value) { alert('Por favor ingresá tu fecha de nacimiento'); return; }
+    if (!document.getElementById('sexo').value) { alert('Por favor seleccioná tu sexo'); return; }
+    if (!document.getElementById('telefono').value.trim()) { alert('Por favor ingresá tu WhatsApp'); return; }
+  }
+  if (from === 2) {
+    if (!document.getElementById('estatura').value) { alert('Por favor ingresá tu estatura'); return; }
+    if (!document.getElementById('peso').value) { alert('Por favor ingresá tu peso'); return; }
+    if (!document.querySelector('input[name="objetivo"]:checked')) { alert('Por favor seleccioná tu objetivo'); return; }
+  }
+
+  document.getElementById('step' + from).classList.remove('active');
+  currentStep = from + 1;
+  document.getElementById('step' + currentStep).classList.add('active');
+  document.getElementById('progress').style.width = (currentStep / totalSteps * 100) + '%';
+
+  if (currentStep === 5) generarResumen();
+  window.scrollTo(0, 0);
+}
+
+function prevStep(from) {
+  document.getElementById('step' + from).classList.remove('active');
+  currentStep = from - 1;
+  document.getElementById('step' + currentStep).classList.add('active');
+  document.getElementById('progress').style.width = (currentStep / totalSteps * 100) + '%';
+  window.scrollTo(0, 0);
+}
+
+function getChecked(name) {
+  return Array.from(document.querySelectorAll('input[name="'+name+'"]:checked')).map(e=>e.value).join(', ') || '—';
+}
+function getVal(id) { return document.getElementById(id)?.value || '—'; }
+
+function calcEdad(fecha) {
+  if (!fecha) return '—';
+  const hoy = new Date();
+  const nac = new Date(fecha);
+  let edad = hoy.getFullYear() - nac.getFullYear();
+  const m = hoy.getMonth() - nac.getMonth();
+  if (m < 0 || (m === 0 && hoy.getDate() < nac.getDate())) edad--;
+  return edad + ' años';
+}
+
+function generarResumen() {
+  const r = document.getElementById('resumen');
+  r.innerHTML = `
+    <b style="color:#1B3A5C;font-size:14px">📋 RESUMEN DE TU FICHA</b><br><br>
+    <b>👤 DATOS PERSONALES</b><br>
+    Nombre: ${getVal('nombre')}<br>
+    Edad: ${calcEdad(getVal('fecha_nac'))} | Sexo: ${getVal('sexo')}<br>
+    Ciudad: ${getVal('ciudad')} | WhatsApp: ${getVal('telefono')}<br><br>
+    <b>📏 MEDIDAS</b><br>
+    Estatura: ${getVal('estatura')} cm | Peso: ${getVal('peso')} kg<br>
+    Cintura: ${getVal('cintura')} cm | Cadera: ${getVal('cadera')} cm | Cuello: ${getVal('cuello')} cm<br>
+    Pecho: ${getVal('pecho')} cm | Bíceps: ${getVal('biceps')} cm | Muslo: ${getVal('muslo')} cm<br>
+    Objetivo: ${getChecked('objetivo')}<br><br>
+    <b>🌙 HÁBITOS</b><br>
+    Levantada semana: ${getVal('levanta_semana')} | Finde: ${getVal('levanta_finde')}<br>
+    Acostada semana: ${getVal('acuesta_semana')} | Finde: ${getVal('acuesta_finde')}<br>
+    Siesta: ${getChecked('siesta')} | Comidas/día: ${getChecked('comidas_dia')}<br>
+    Agua: ${getChecked('agua')} | Alcohol: ${getChecked('alcohol')}<br>
+    Intolerancias: ${getVal('intolerancias')}<br><br>
+    <b>🏋️ ENTRENAMIENTO Y SALUD</b><br>
+    Nivel: ${getChecked('entrena')} | Días: ${getVal('dias_entreno')} | Hora: ${getVal('hora_entreno')}<br>
+    Cardio: ${getChecked('cardio')} | Trabajo: ${getChecked('trabajo')}<br>
+    Estrés: ${getChecked('estres')}<br>
+    Patologías: ${getChecked('patologia')}<br>
+    Medicamentos/Suplementos: ${getVal('medicamentos')}<br>
+    Lesiones: ${getVal('lesiones')}
+  `;
+}
+
+function enviarWhatsApp() {
+  const comentarios = getVal('comentarios');
+  const msg = `💪 *FICHA DE EVALUACIÓN — PESOCA10*
+
+👤 *DATOS PERSONALES*
+Nombre: ${getVal('nombre')}
+Edad: ${calcEdad(getVal('fecha_nac'))} | Sexo: ${getVal('sexo')}
+Ciudad: ${getVal('ciudad')}
+WhatsApp: ${getVal('telefono')}
+Email: ${getVal('email')}
+
+📏 *MEDIDAS CORPORALES*
+Estatura: ${getVal('estatura')} cm | Peso: ${getVal('peso')} kg
+Cintura: ${getVal('cintura')} cm | Cadera: ${getVal('cadera')} cm
+Cuello: ${getVal('cuello')} cm | Pecho: ${getVal('pecho')} cm
+Bíceps: ${getVal('biceps')} cm | Muslo: ${getVal('muslo')} cm
+Objetivo: ${getChecked('objetivo')}
+
+🌙 *HÁBITOS Y RUTINA*
+Se levanta (L-V): ${getVal('levanta_semana')} | (S-D): ${getVal('levanta_finde')}
+Se acuesta (L-V): ${getVal('acuesta_semana')} | (S-D): ${getVal('acuesta_finde')}
+Siesta: ${getChecked('siesta')}
+Comidas por día: ${getChecked('comidas_dia')}
+Agua diaria: ${getChecked('agua')}
+Alcohol: ${getChecked('alcohol')}
+Intolerancias: ${getVal('intolerancias')}
+
+🏋️ *ENTRENAMIENTO Y SALUD*
+Nivel entreno: ${getChecked('entrena')}
+Días por semana: ${getVal('dias_entreno')}
+Hora de entreno: ${getVal('hora_entreno')}
+Cardio: ${getChecked('cardio')}
+Tipo de trabajo: ${getChecked('trabajo')}
+Nivel de estrés: ${getChecked('estres')}
+Patologías: ${getChecked('patologia')}
+Medicamentos/Suplementos: ${getVal('medicamentos')}
+Lesiones: ${getVal('lesiones')}
+
+💬 *COMENTARIOS ADICIONALES*
+${comentarios !== '—' ? comentarios : 'Sin comentarios'}
+
+---
+_Enviado desde la ficha digital de PESOCA10_`;
+
+  const url = 'https://wa.me/595982942620?text=' + encodeURIComponent(msg);
+  window.open(url, '_blank');
+}
+</script>
+</body>
+</html>
